@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import data.Person;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
