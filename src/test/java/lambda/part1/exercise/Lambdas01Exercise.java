@@ -7,6 +7,8 @@ import com.google.common.collect.ImmutableList;
 import data.Person;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -23,6 +25,12 @@ class Lambdas01Exercise {
         };
 
         // TODO use Arrays.sort
+        Arrays.sort(persons, new Comparator<Person>() {
+            @Override
+            public int compare(Person p1, Person p2) {
+                return Integer.compare(p1.getAge(), p2.getAge());
+            }
+        });
 
         assertArrayEquals(persons, new Person[]{
                 new Person("name 3", "lastName 3", 20),
@@ -47,9 +55,13 @@ class Lambdas01Exercise {
                 .firstMatch(new Predicate<Person>() {
                     @Override
                     public boolean apply(Person p) {
-                        return p.getFirstName().equals("name 1");
+                        return p.getAge()==30;
                     }
                 });
+
+
+        if (personOptional.isPresent())
+            person = personOptional.get();
 
         assertEquals(person, new Person("name 1", "lastName 2", 30));
     }
