@@ -42,17 +42,14 @@ class Lambdas01Exercise {
         Person person = null;
 
         // TODO use FluentIterable
-        Optional<Person> personOptional = FluentIterable.from(persons).firstMatch(
-                new Predicate<Person>() {
+        Optional<Person> personOptional =
+                FluentIterable.from(persons)
+                .firstMatch(new Predicate<Person>() {
                     @Override
                     public boolean apply(Person p) {
                         return p.getFirstName().equals("name 1");
                     }
-                }
-        );
-
-        if (personOptional.isPresent())
-            person = personOptional.get();
+                });
 
         assertEquals(person, new Person("name 1", "lastName 2", 30));
     }
