@@ -50,7 +50,7 @@ class Lambdas01Exercise {
         Person person = null;
 
         // TODO use FluentIterable
-        Optional<Person> personOptional =
+        final Optional<Person> personOptional =
                 FluentIterable.from(persons)
                         .firstMatch(new Predicate<Person>() {
                             public boolean apply(Person p) {
