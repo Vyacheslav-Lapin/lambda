@@ -30,7 +30,11 @@ class Mapping {
         // [T1, T2, T3] -> (T -> R) -> [R1, R2, R3]
         public <R> MapHelper<R> map(Function<T, R> f) {
             // TODO
-            throw new UnsupportedOperationException();
+            final ArrayList<R> rs = new ArrayList<>();
+            for (T t: list) {
+                rs.add(f.apply(t));
+            }
+            return new MapHelper<R>(rs);
         }
 
         // [T] -> (T -> [R]) -> [R]
@@ -45,6 +49,22 @@ class Mapping {
 
             return new MapHelper<R>(result);
         }
+    }
+
+    private List<JobHistoryEntry> addOneYear(List<JobHistoryEntry> jobHistory) {
+
+        return new MapHelper<>(jobHistory)
+                .map(jobHistoryEntry -> jobHistoryEntry
+                    .withDuration(jobHistoryEntry.getDuration()+1))
+                .getList();
+    }
+
+    private List<JobHistoryEntry> replace(List<JobHistoryEntry> jobHistory) {
+
+        return new MapHelper<>(jobHistory)
+                .map(jobHistoryEntry -> jobHistoryEntry
+                    .withPosition(jobHistoryEntry.getPosition().equals("qa") ? "QA" : "dev"))
+                .getList();
     }
 
     @Test
@@ -70,15 +90,18 @@ class Mapping {
                                         new JobHistoryEntry(5, "qa", "epam")
                                 ))
                 );
-
         final List<Employee> mappedEmployees =
                 new MapHelper<>(employees)
+                        .map(e -> e.withPerson(e.getPerson().withFirstName("John")))
+                        .map(e -> e.withJobHistory(addOneYear(e.getJobHistory())))
+                        .map(e -> e.withJobHistory(replace(e.getJobHistory())))
+                        .getList();
                 /*
                 .map(TODO) // change name to John .map(e -> e.withPerson(e.getPerson().withFirstName("John")))
                 .map(TODO) // add 1 year to experience duration .map(e -> e.withJobHistory(addOneYear(e.getJobHistory())))
                 .map(TODO) // replace qa with QA
                 * */
-                .getList();
+
 
         final List<Employee> expectedResult =
                 Arrays.asList(
