@@ -21,8 +21,7 @@ dependencies {
     compile 'com.google.guava:guava:+',
             'org.apache.commons:commons-lang3:+',
             'ch.qos.logback:logback-classic:+',
-            'io.javaslang:javaslang:+',
-            'com.github.Vyacheslav-Lapin:Hegel:master-SNAPSHOT' //https://github.com/Vyacheslav-Lapin/Hegel.git
+            'io.javaslang:javaslang:+'
 
     compileOnly 'org.projectlombok:lombok:+',
             'edu.washington.cs.types.checker:checker-framework:+'

@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 class Mapping {
 
     private static class MapHelper<T> {
@@ -29,8 +30,11 @@ class Mapping {
         // [T] -> (T -> R) -> [R]
         // [T1, T2, T3] -> (T -> R) -> [R1, R2, R3]
         public <R> MapHelper<R> map(Function<T, R> f) {
-            // TODO
-            throw new UnsupportedOperationException();
+            final List<R> result = new ArrayList<R>();
+            list.forEach((T t) ->
+                    result.add(f.apply(t)));
+
+            return new MapHelper<R>(result);
         }
 
         // [T] -> (T -> [R]) -> [R]
@@ -73,12 +77,10 @@ class Mapping {
 
         final List<Employee> mappedEmployees =
                 new MapHelper<>(employees)
-                /*
-                .map(TODO) // change name to John .map(e -> e.withPerson(e.getPerson().withFirstName("John")))
-                .map(TODO) // add 1 year to experience duration .map(e -> e.withJobHistory(addOneYear(e.getJobHistory())))
-                .map(TODO) // replace qa with QA
-                * */
-                .getList();
+                        .map(employee -> employee.withPerson(employee.getPerson().withFirstName("John")))
+                        .map(employee -> employee.withJobHistory(addOneYear(employee.getJobHistory())))
+                        .map(employee -> employee.withJobHistory(replaseQA(employee.getJobHistory())))
+                        .getList();
 
         final List<Employee> expectedResult =
                 Arrays.asList(
@@ -103,6 +105,17 @@ class Mapping {
                 );
 
         assertEquals(mappedEmployees, expectedResult);
+    }
+
+    private List<JobHistoryEntry> replaseQA(List<JobHistoryEntry> jobHistory) {
+        MapHelper<JobHistoryEntry> jhem = new MapHelper<>(jobHistory);
+        return jhem.map(entry -> entry.withPosition(entry.getPosition()
+                .replace("qa", "QA"))).getList();
+    }
+
+    private List<JobHistoryEntry> addOneYear(List<JobHistoryEntry> jobHistory) {
+        MapHelper<JobHistoryEntry> jhem = new MapHelper<>(jobHistory);
+        return jhem.map(entry -> entry.withDuration(entry.getDuration() + 1)).getList();
     }
 
 
