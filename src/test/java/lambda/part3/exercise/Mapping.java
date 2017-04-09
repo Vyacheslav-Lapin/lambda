@@ -1,5 +1,7 @@
 package lambda.part3.exercise;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import data.Employee;
 import data.JobHistoryEntry;
 import data.Person;
@@ -10,8 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Mapping {
 
@@ -156,15 +156,24 @@ class Mapping {
 
     private static class LazyFlatMapHelper<T, R> {
 
+        private final List<T> list;
+        private final Function<T,List<R>> function;
+
         public LazyFlatMapHelper(List<T> list, Function<T, List<R>> function) {
+            this.list = list;
+            this.function = function;
         }
 
         public static <T> LazyFlatMapHelper<T, T> from(List<T> list) {
-            throw new UnsupportedOperationException();
+            return new LazyFlatMapHelper<>(list, Arrays::asList);
         }
 
         public List<R> force() {
             // TODO
+//            final ArrayList<R> rs = new ArrayList<>();
+//            return list.stream()
+//                .map(function)
+//                .forEach(r -> rs.add(r));
             throw new UnsupportedOperationException();
         }
 
@@ -180,12 +189,19 @@ class Mapping {
 
         // (R -> R2) -> (R -> [R2])
         private <R2> Function<R, List<R2>> rR2TorListR2(Function<R, R2> f) {
-            throw new UnsupportedOperationException();
+            return (R r) -> Collections.singletonList(f.apply(r));
         }
 
         // TODO *
         <R2> LazyFlatMapHelper<T, R2> flatMap(Function<R, List<R2>> f) {
             throw new UnsupportedOperationException();
+//            return new LazyFlatMapHelper<T, R2>
+//                (list,
+//                 (T t) -> function.apply(t).forEach(r -> r)
+//                )
+
+
+//                         .collect(ArrayList::new, List::add, List::addAll));
         }
     }
 
